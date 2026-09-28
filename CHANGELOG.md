@@ -2,6 +2,29 @@
 
 All notable changes to Daily Planner AI are documented here.
 
+## [0.5.0] — 2026-09-28
+
+### Added (Stage 4 — Android Background Functionality & Notifications)
+
+- **NotificationService**: Schedules, cancels, and reconciles local notifications
+- **NotificationProvider interface**: Provider-agnostic abstraction for platform notifications
+- **CapacitorNotificationProvider**: Android implementation using @capacitor/local-notifications
+- **Notification channels**: Task reminders, planning (morning briefing), overdue
+- **Task lifecycle hooks**: Create/edit/delete/complete/uncomplete all sync notifications
+- **Morning briefing**: Configurable daily notification with task count
+- **Overdue reminders**: Configurable overdue task notifications
+- **Notification reconciliation**: `syncScheduledNotifications()` on app start/resume
+- **Stable notification IDs**: `taskId + 1000000` mapping prevents duplicates
+- **Settings UI**: Notification toggles, briefing time, privacy controls
+- **Unit tests**: 16 tests for NotificationService (all passing)
+
+### Changed
+
+- `src/services/TaskService.js`: Added notification hooks to all lifecycle methods
+- `src/services/SettingsService.js`: Added notification preferences
+- `src/pages/SettingsPage.js`: Replaced "Coming soon" placeholders with functional controls
+- `src/services/ServiceContainer.js`: Wired NotificationService into DI container
+
 ## [0.4.0] — 2026-09-28
 
 ### Added (Stage 3 — Calendar & Planner Engine)

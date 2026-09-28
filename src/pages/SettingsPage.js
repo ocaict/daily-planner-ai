@@ -75,24 +75,47 @@ export class SettingsPage {
           <div class="settings-list">
             <div class="setting-row">
               <div class="setting-text-col">
-                <span class="setting-label">Morning briefing</span>
-                <span class="setting-subtext">Coming soon</span>
+                <span class="setting-label">Enable notifications</span>
+                <span class="setting-subtext">Master switch for all notifications</span>
               </div>
-              <span class="setting-badge">Soon</span>
+              <label class="toggle">
+                <input type="checkbox" id="setting-notifications-enabled" ${settings.notificationsEnabled ? 'checked' : ''} />
+                <span class="toggle-slider"></span>
+              </label>
             </div>
             <div class="setting-row">
               <div class="setting-text-col">
-                <span class="setting-label">Task reminders</span>
-                <span class="setting-subtext">Coming soon</span>
+                <span class="setting-label">Morning briefing</span>
+                <span class="setting-subtext">Daily planning summary</span>
               </div>
-              <span class="setting-badge">Soon</span>
+              <label class="toggle">
+                <input type="checkbox" id="setting-morning-briefing" ${settings.morningBriefingEnabled ? 'checked' : ''} />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Briefing time</span>
+              <input type="time" class="setting-input-time" id="setting-briefing-time" value="${settings.morningBriefingTime}" />
             </div>
             <div class="setting-row">
               <div class="setting-text-col">
                 <span class="setting-label">Overdue reminders</span>
-                <span class="setting-subtext">Coming soon</span>
+                <span class="setting-subtext">Notify about overdue tasks</span>
               </div>
-              <span class="setting-badge">Soon</span>
+              <label class="toggle">
+                <input type="checkbox" id="setting-overdue-reminders" ${settings.overdueRemindersEnabled ? 'checked' : ''} />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-row">
+              <div class="setting-text-col">
+                <span class="setting-label">Notification privacy</span>
+                <span class="setting-subtext">Show minimal details on lock screen</span>
+              </div>
+              <select id="setting-notification-privacy" class="setting-select">
+                <option value="minimal" ${settings.notificationPrivacy === 'minimal' ? 'selected' : ''}>Minimal</option>
+                <option value="full" ${settings.notificationPrivacy === 'full' ? 'selected' : ''}>Full details</option>
+              </select>
             </div>
           </div>
         </div>
@@ -186,6 +209,29 @@ export class SettingsPage {
     }
     if (styleSelect) {
       styleSelect.addEventListener('change', () => persistSetting('planningStyle', styleSelect.value));
+    }
+
+    // Notification settings persistence
+    const notifEnabled = container.querySelector('#setting-notifications-enabled');
+    const morningBriefing = container.querySelector('#setting-morning-briefing');
+    const briefingTime = container.querySelector('#setting-briefing-time');
+    const overdueReminders = container.querySelector('#setting-overdue-reminders');
+    const notifPrivacy = container.querySelector('#setting-notification-privacy');
+
+    if (notifEnabled) {
+      notifEnabled.addEventListener('change', () => persistSetting('notificationsEnabled', notifEnabled.checked));
+    }
+    if (morningBriefing) {
+      morningBriefing.addEventListener('change', () => persistSetting('morningBriefingEnabled', morningBriefing.checked));
+    }
+    if (briefingTime) {
+      briefingTime.addEventListener('change', () => persistSetting('morningBriefingTime', briefingTime.value));
+    }
+    if (overdueReminders) {
+      overdueReminders.addEventListener('change', () => persistSetting('overdueRemindersEnabled', overdueReminders.checked));
+    }
+    if (notifPrivacy) {
+      notifPrivacy.addEventListener('change', () => persistSetting('notificationPrivacy', notifPrivacy.value));
     }
 
     // Delete all data handler

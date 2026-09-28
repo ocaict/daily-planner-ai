@@ -12,6 +12,7 @@ import TaskService from './TaskService.js';
 import CategoryService from './CategoryService.js';
 import PlannerService from './PlannerService.js';
 import SettingsService from './SettingsService.js';
+import NotificationService from './NotificationService.js';
 import { mockTasks } from '../data/mockData.js';
 
 class ServiceContainer {
@@ -23,6 +24,7 @@ class ServiceContainer {
     this._categoryService = null;
     this._plannerService = null;
     this._settingsService = null;
+    this._notificationService = null;
     this._dbAvailable = false;
   }
 
@@ -46,6 +48,11 @@ class ServiceContainer {
         taskRepository: this._taskRepository,
         settingsService: this._settingsService,
       });
+      this._notificationService = new NotificationService({
+        taskRepository: this._taskRepository,
+        settingsService: this._settingsService,
+      });
+      this._taskService.notificationService = this._notificationService;
       this._dbAvailable = true;
 
       this._initialized = true;
@@ -126,6 +133,10 @@ class ServiceContainer {
 
   get settingsService() {
     return this._settingsService;
+  }
+
+  get notificationService() {
+    return this._notificationService;
   }
 
   get taskRepository() {

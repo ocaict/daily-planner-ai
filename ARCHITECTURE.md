@@ -66,3 +66,7 @@ src/
 - **Deterministic Planner**: `PlannerEngine` is pure logic — no AI, no network, no UI dependencies
 - **ServiceContainer**: DI container wires all services; falls back to mock data if DB unavailable
 - **Centralized date/time**: All date logic in `DateUtils.js` — no scattered date calculations
+- **Notification architecture**: `NotificationService` → `NotificationProvider` → `CapacitorNotificationProvider` (provider-agnostic)
+- **Notification lifecycle**: TaskService hooks into NotificationService for create/edit/delete/complete/uncomplete
+- **Notification reconciliation**: `syncScheduledNotifications()` on app start/resume
+- **Stable notification IDs**: `taskId + 1000000` mapping prevents duplicates

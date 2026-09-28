@@ -2,7 +2,7 @@
 
 ## Current Stage
 
-**Stage 3 — Calendar & Planner Engine**
+**Stage 4 — Android Background Functionality & Notifications**
 
 ## Completed Work
 

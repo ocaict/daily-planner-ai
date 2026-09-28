@@ -10,6 +10,11 @@ const DEFAULT_SETTINGS = Object.freeze({
   dayEnd: '22:00',
   defaultTaskDuration: 30,
   planningStyle: 'balanced',
+  notificationsEnabled: true,
+  morningBriefingEnabled: true,
+  morningBriefingTime: '08:00',
+  overdueRemindersEnabled: true,
+  notificationPrivacy: 'minimal',
 });
 
 class SettingsService {

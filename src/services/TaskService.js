@@ -3,9 +3,10 @@ import { AppError } from '../utils/ErrorHandler.js';
 import { getCurrentDate } from '../utils/DateUtils.js';
 
 export default class TaskService {
-  constructor(taskRepository, categoryRepository) {
+  constructor(taskRepository, categoryRepository, notificationService = null) {
     this.taskRepository = taskRepository;
     this.categoryRepository = categoryRepository;
+    this.notificationService = notificationService;
   }
 
   async getTasks() {
@@ -40,7 +41,11 @@ export default class TaskService {
     const newTask = new Task({ ...task, completed: false, createdAt: now, updatedAt: now });
 
     try {
-      return await this.taskRepository.create(newTask);
+      const created = await this.taskRepository.create(newTask);
+      if (this.notificationService) {
+        await this.notificationService.scheduleTaskReminder(created);
+      }
+      return created;
     } catch (error) {
       throw this.#wrapError(error, 'Unable to create task. Please try again.', 'TASK_CREATE_ERROR');
     }
@@ -76,7 +81,11 @@ export default class TaskService {
     });
 
     try {
-      return await this.taskRepository.update(updatedTask);
+      const result = await this.taskRepository.update(updatedTask);
+      if (this.notificationService) {
+        await this.notificationService.updateTaskReminder(result);
+      }
+      return result;
     } catch (error) {
       throw this.#wrapError(error, 'Unable to update task. Please try again.', 'TASK_UPDATE_ERROR');
     }
@@ -85,6 +94,9 @@ export default class TaskService {
   async deleteTask(id) {
     try {
       await this.taskRepository.delete(id);
+      if (this.notificationService) {
+        await this.notificationService.cancelTaskReminder(id);
+      }
     } catch (error) {
       throw this.#wrapError(error, 'Unable to delete task. Please try again.', 'TASK_DELETE_ERROR');
     }
@@ -92,7 +104,11 @@ export default class TaskService {
 
   async completeTask(id) {
     try {
-      return await this.taskRepository.completeTask(id);
+      const result = await this.taskRepository.completeTask(id);
+      if (this.notificationService) {
+        await this.notificationService.cancelTaskReminder(id);
+      }
+      return result;
     } catch (error) {
       throw this.#wrapError(error, 'Unable to complete task. Please try again.', 'TASK_COMPLETE_ERROR');
     }
@@ -100,7 +116,14 @@ export default class TaskService {
 
   async uncompleteTask(id) {
     try {
-      return await this.taskRepository.uncompleteTask(id);
+      const result = await this.taskRepository.uncompleteTask(id);
+      if (this.notificationService) {
+        const task = await this.taskRepository.findById(id);
+        if (task) {
+          await this.notificationService.scheduleTaskReminder(task);
+        }
+      }
+      return result;
     } catch (error) {
       throw this.#wrapError(error, 'Unable to update task. Please try again.', 'TASK_UNCOMPLETE_ERROR');
     }
