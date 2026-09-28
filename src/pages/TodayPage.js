@@ -13,8 +13,11 @@ import { renderLoading } from '../components/LoadingSpinner.js';
 import { renderPlanPreview } from '../components/PlanPreview.js';
 
 export class TodayPage {
-  constructor(taskService) {
+  constructor(taskService, categoryService, plannerService, settingsService) {
     this.taskService = taskService;
+    this.categoryService = categoryService;
+    this.plannerService = plannerService;
+    this.settingsService = settingsService;
     this.title = 'Today';
     this.todayTasks = [];
     this.overdueTasks = [];

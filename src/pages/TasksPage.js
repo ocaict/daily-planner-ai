@@ -14,8 +14,9 @@ import { openTaskFormModal } from '../components/TaskFormModal.js';
 import { openTaskDetailModal } from '../components/TaskDetailModal.js';
 
 export class TasksPage {
-  constructor(taskService) {
+  constructor(taskService, categoryService, plannerService, settingsService) {
     this.taskService = taskService;
+    this.categoryService = categoryService;
     this.title = 'Tasks';
     this.activeFilter = 'all';
     this.filters = [

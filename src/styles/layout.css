@@ -612,3 +612,109 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--app-font-size-sm);
   font-weight: 500;
 }
+
+/* Page action buttons (today, add task, etc.) */
+.page-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--app-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: var(--app-radius-sm);
+  cursor: pointer;
+}
+
+.page-action-btn svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Calendar Day Task Items */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: var(--app-spacing-md);
+  padding: var(--app-spacing-sm) 0;
+  border-bottom: 1px solid var(--app-border-light);
+  cursor: pointer;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.task-item-checkbox svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.task-item-checkbox--done {
+  background: var(--app-success);
+  border-color: var(--app-success);
+  color: #fff;
+}
+
+.task-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-item-title {
+  font-size: var(--app-font-size-md);
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.task-item-title.task-completed {
+  text-decoration: line-through;
+  color: var(--app-text-muted);
+}
+
+.task-item-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--app-spacing-sm);
+  font-size: var(--app-font-size-xs);
+  color: var(--app-text-muted);
+  margin-top: 2px;
+}
+
+.task-item-chevron {
+  color: var(--app-text-muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.task-item-chevron svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.empty-state svg,
+.empty-state .icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--app-spacing-md);
+  color: var(--app-text-muted);
+  display: block;
+}
+

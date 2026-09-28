@@ -93,11 +93,12 @@ function formField(fieldId, label, inputHtml, error = '') {
  * Open the task form modal.
  * @param {object} params
  * @param {object|null} [params.task=null] - Task to edit, or null for create mode
+ * @param {string|null} [params.defaultDate=null] - Default date in YYYY-MM-DD format for create mode
  * @param {Function} [params.onSave] - Called with sanitized data on successful save
  * @param {Function} [params.onCancel] - Called when modal is dismissed without saving
  * @returns {Promise<HTMLIonModalElement>}
  */
-export async function openTaskFormModal({ task = null, onSave, onCancel } = {}) {
+export async function openTaskFormModal({ task = null, defaultDate = null, onSave, onCancel } = {}) {
   modalCounter++;
   const modalId = `task-form-modal-${modalCounter}`;
   const isEditMode = task !== null && task !== undefined;
@@ -114,7 +115,7 @@ export async function openTaskFormModal({ task = null, onSave, onCancel } = {}) 
   const values = {
     title: task?.title || '',
     description: task?.description || '',
-    date: task?.dueDate || getCurrentDate(),
+    date: task?.dueDate || task?.date || defaultDate || getCurrentDate(),
     startTime: task?.startTime || '',
     dueTime: task?.dueTime || '',
     duration: task?.duration || '',

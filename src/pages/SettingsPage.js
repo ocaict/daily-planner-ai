@@ -3,12 +3,17 @@ import { showToast } from '../components/Toast.js';
 import { themeManager } from '../utils/ThemeManager.js';
 
 export class SettingsPage {
-  constructor() {
+  constructor(taskService, categoryService, plannerService, settingsService) {
+    this.taskService = taskService;
+    this.settingsService = settingsService;
     this.title = 'Settings';
   }
 
   render() {
     const currentTheme = themeManager.getTheme();
+    const settings = this.settingsService ? this.settingsService.getSettings() : {
+      dayStart: '08:00', dayEnd: '22:00', defaultTaskDuration: 30, planningStyle: 'balanced',
+    };
 
     return `
       <div class="page-header">
@@ -21,29 +26,29 @@ export class SettingsPage {
           <div class="settings-list">
             <div class="setting-row">
               <span class="setting-label">Day starts at</span>
-              <input type="time" class="setting-input-time" id="setting-day-start" value="08:00" />
+              <input type="time" class="setting-input-time" id="setting-day-start" value="${settings.dayStart}" />
             </div>
             <div class="setting-row">
               <span class="setting-label">Day ends at</span>
-              <input type="time" class="setting-input-time" id="setting-day-end" value="22:00" />
+              <input type="time" class="setting-input-time" id="setting-day-end" value="${settings.dayEnd}" />
             </div>
             <div class="setting-row">
               <span class="setting-label">Default task duration</span>
               <select id="setting-default-duration" class="setting-select">
-                <option value="15">15 min</option>
-                <option value="30" selected>30 min</option>
-                <option value="45">45 min</option>
-                <option value="60">1 hour</option>
-                <option value="90">1.5 hours</option>
-                <option value="120">2 hours</option>
+                <option value="15" ${settings.defaultTaskDuration === 15 ? 'selected' : ''}>15 min</option>
+                <option value="30" ${settings.defaultTaskDuration === 30 ? 'selected' : ''}>30 min</option>
+                <option value="45" ${settings.defaultTaskDuration === 45 ? 'selected' : ''}>45 min</option>
+                <option value="60" ${settings.defaultTaskDuration === 60 ? 'selected' : ''}>1 hour</option>
+                <option value="90" ${settings.defaultTaskDuration === 90 ? 'selected' : ''}>1.5 hours</option>
+                <option value="120" ${settings.defaultTaskDuration === 120 ? 'selected' : ''}>2 hours</option>
               </select>
             </div>
             <div class="setting-row">
               <span class="setting-label">Planning style</span>
               <select id="setting-planning-style" class="setting-select">
-                <option value="relaxed">Relaxed</option>
-                <option value="balanced" selected>Balanced</option>
-                <option value="strict">Strict</option>
+                <option value="relaxed" ${settings.planningStyle === 'relaxed' ? 'selected' : ''}>Relaxed</option>
+                <option value="balanced" ${settings.planningStyle === 'balanced' ? 'selected' : ''}>Balanced</option>
+                <option value="strict" ${settings.planningStyle === 'strict' ? 'selected' : ''}>Strict</option>
               </select>
             </div>
           </div>
@@ -157,6 +162,31 @@ export class SettingsPage {
         themeManager.setTheme(theme);
       });
     });
+
+    // Planning settings persistence
+    const dayStartInput = container.querySelector('#setting-day-start');
+    const dayEndInput = container.querySelector('#setting-day-end');
+    const durationSelect = container.querySelector('#setting-default-duration');
+    const styleSelect = container.querySelector('#setting-planning-style');
+
+    const persistSetting = (key, value) => {
+      if (this.settingsService) {
+        this.settingsService.updateSetting(key, value);
+      }
+    };
+
+    if (dayStartInput) {
+      dayStartInput.addEventListener('change', () => persistSetting('dayStart', dayStartInput.value));
+    }
+    if (dayEndInput) {
+      dayEndInput.addEventListener('change', () => persistSetting('dayEnd', dayEndInput.value));
+    }
+    if (durationSelect) {
+      durationSelect.addEventListener('change', () => persistSetting('defaultTaskDuration', parseInt(durationSelect.value, 10)));
+    }
+    if (styleSelect) {
+      styleSelect.addEventListener('change', () => persistSetting('planningStyle', styleSelect.value));
+    }
 
     // Delete all data handler
     const deleteBtn = container.querySelector('#setting-delete-all');

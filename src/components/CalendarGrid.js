@@ -91,13 +91,17 @@ export function renderCalendarGrid(year, month, selectedDate, tasksByDay) {
   return `
     <div class="calendar-grid">
       <div class="calendar-header">
-        <ion-button fill="clear" size="small" class="calendar-nav-btn" data-action="prev-month">
-          <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <button type="button" class="calendar-nav-btn" data-action="prev-month" aria-label="Previous month">
+          <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon" style="width: 18px; height: 18px;">
+            <polyline points="328 112 184 256 328 400" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <span class="calendar-month-label">${escapeHtml(monthLabel)}</span>
-        <ion-button fill="clear" size="small" class="calendar-nav-btn" data-action="next-month">
-          <ion-icon name="chevron-forward-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <button type="button" class="calendar-nav-btn" data-action="next-month" aria-label="Next month">
+          <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon" style="width: 18px; height: 18px;">
+            <polyline points="184 112 328 256 184 400" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
       <div class="calendar-dow-row">
         ${dayHeader}

@@ -25,7 +25,11 @@ const MOCK_ASSISTANT_RESPONSE =
 const ASSISTANT_DELAY = 800;
 
 export class AIPage {
-  constructor() {
+  constructor(taskService, categoryService, plannerService, settingsService) {
+    this.taskService = taskService;
+    this.categoryService = categoryService;
+    this.plannerService = plannerService;
+    this.settingsService = settingsService;
     this.title = 'AI';
     this.messages = [...MOCK_MESSAGES];
     this.isAssistantTyping = false;

@@ -38,6 +38,10 @@
 - [x] PlanPreview component for displaying proposed plans
 - [x] TodayPage "Plan my day" button with plan preview
 - [x] Unit tests for PlannerEngine (12 tests, all passing)
+- [x] All page constructors (TodayPage, TasksPage, CalendarPage, AIPage, SettingsPage) now accept full 4-service injection (taskService, categoryService, plannerService, settingsService)
+- [x] TodayPage.handlePlanMyDay() now correctly uses injected plannerService
+- [x] SettingsPage planning settings (dayStart, dayEnd, defaultDuration, planningStyle) now persisted to localStorage via SettingsService on change
+- [x] Calendar empty-state SVG sizing fixed for Android WebView
 
 ### Stage 2 (Local Task System)
 - [x] Migration v2: `categories` and `tasks` tables with indexes
@@ -76,8 +80,8 @@
 
 | Check | Status |
 |-------|--------|
-| `npm run build` | PASS (146 modules, 0 errors) |
+| `npm run build` | PASS (152 modules, 0 errors) |
 | `npx cap sync` | PASS |
-| `npm run lint` | PASS (0 errors, 36 warnings) |
+| `npm run lint` | PASS (0 errors, ~36 warnings) |
 | Android build (`gradlew assembleDebug`) | PASS (`app-debug.apk` built successfully) |
-| Android Emulator (`android17` / `emulator-5554`) | PASS (live preview verified: SQLite migrations, full CRUD, theme toggle, calendar, modals, 60fps) |
+| Android Emulator (`android17` / `emulator-5554`) | PASS (live preview verified: SQLite migrations, full CRUD, theme toggle, calendar, modals, today page, settings persistence) |
