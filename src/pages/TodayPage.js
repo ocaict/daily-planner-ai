@@ -10,6 +10,7 @@ import { renderConfirmationDialog } from '../components/ConfirmationDialog.js';
 import { openTaskFormModal } from '../components/TaskFormModal.js';
 import { openTaskDetailModal } from '../components/TaskDetailModal.js';
 import { renderLoading } from '../components/LoadingSpinner.js';
+import { renderPlanPreview } from '../components/PlanPreview.js';
 
 export class TodayPage {
   constructor(taskService) {
@@ -232,6 +233,17 @@ export class TodayPage {
           </button>
         </div>
 
+        <!-- Plan My Day Button -->
+        <div class="plan-my-day-section">
+          <button class="plan-my-day-button" id="plan-my-day-btn" aria-label="Plan my day">
+            <ion-icon name="calendar-outline"></ion-icon>
+            Plan my day
+          </button>
+        </div>
+
+        <!-- Plan Preview Container -->
+        <div id="plan-preview-container"></div>
+
         <!-- Floating Action Button -->
         <button class="quick-add-fab" id="quick-add-fab" aria-label="Quick add task">
           <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="quick-add-fab-icon">
@@ -281,6 +293,12 @@ export class TodayPage {
       return;
     }
 
+    // Handle Plan my day button
+    if (e.target.closest('#plan-my-day-btn')) {
+      this.handlePlanMyDay();
+      return;
+    }
+
     // Handle "View All" section actions
     const sectionAction = e.target.closest('[data-action="section-action"]');
     if (sectionAction) {
@@ -316,6 +334,21 @@ export class TodayPage {
       },
       onCancel: () => {},
     });
+  }
+
+  /**
+   * Handle "Plan my day" — generate and display a proposed plan.
+   */
+  async handlePlanMyDay() {
+    try {
+      const plan = await this.plannerService.generateDailyPlan();
+      const container = document.getElementById('plan-preview-container');
+      if (container) {
+        container.innerHTML = renderPlanPreview(plan);
+      }
+    } catch (error) {
+      showToast('Failed to generate plan', 'error');
+    }
   }
 
   /**

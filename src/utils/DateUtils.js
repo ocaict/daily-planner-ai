@@ -189,3 +189,162 @@ export function getStartOfWeek(date) {
   d.setHours(0, 0, 0, 0);
   return d;
 }
+
+/**
+ * Add days to a date.
+ * @param {Date} date
+ * @param {number} days
+ * @returns {Date}
+ */
+export function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+/**
+ * Get the number of days in a month.
+ * @param {number} year
+ * @param {number} month - 0-indexed
+ * @returns {number}
+ */
+export function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+/**
+ * Get the day of week for the first day of a month (0 = Sunday).
+ * @param {number} year
+ * @param {number} month - 0-indexed
+ * @returns {number}
+ */
+export function getFirstDayOfMonth(year, month) {
+  return new Date(year, month, 1).getDay();
+}
+
+/**
+ * Convert minutes since midnight to HH:MM string.
+ * @param {number} minutes
+ * @returns {string}
+ */
+export function minutesToTime(minutes) {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+/**
+ * Convert HH:MM string to minutes since midnight.
+ * @param {string} time
+ * @returns {number}
+ */
+export function timeToMinutes(time) {
+  if (!time || typeof time !== 'string') return 0;
+  const [h, m] = time.split(':').map(Number);
+  return (h || 0) * 60 + (m || 0);
+}
+
+/**
+ * Check if two dates are the same day.
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {boolean}
+ */
+export function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+}
+
+/**
+ * Check if a date is before another date (day-level).
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {boolean}
+ */
+export function isBefore(a, b) {
+  const da = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  const db = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  return da < db;
+}
+
+/**
+ * Check if a date is after another date (day-level).
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {boolean}
+ */
+export function isAfter(a, b) {
+  const da = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  const db = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  return da > db;
+}
+
+/**
+ * Get the difference in days between two dates.
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {number}
+ */
+export function diffInDays(a, b) {
+  const da = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  const db = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.round((db - da) / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Get the start of a week containing the given date (Monday).
+ * @param {Date} date
+ * @returns {Date}
+ */
+export function startOfWeek(date) {
+  return getStartOfWeek(date);
+}
+
+/**
+ * Get the end of a week containing the given date (Sunday).
+ * @param {Date} date
+ * @returns {Date}
+ */
+export function endOfWeek(date) {
+  const start = getStartOfWeek(date);
+  const end = addDays(start, 6);
+  end.setHours(23, 59, 59, 999);
+  return end;
+}
+
+/**
+ * Get all dates in a month grid (including leading/trailing days from adjacent months).
+ * @param {number} year
+ * @param {number} month - 0-indexed
+ * @returns {Array<{date: Date, inMonth: boolean, dateKey: string}>}
+ */
+export function getMonthGrid(year, month) {
+  const firstDay = getFirstDayOfMonth(year, month);
+  const daysInMonth = getDaysInMonth(year, month);
+  const prevMonthDays = getDaysInMonth(year, month - 1);
+
+  const cells = [];
+
+  // Leading days from previous month
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = prevMonthDays - i;
+    const d = new Date(year, month - 1, day);
+    cells.push({ date: d, inMonth: false, dateKey: formatDate(d, 'iso') });
+  }
+
+  // Days in current month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(year, month, day);
+    cells.push({ date: d, inMonth: true, dateKey: formatDate(d, 'iso') });
+  }
+
+  // Trailing days from next month to fill 6 rows (42 cells)
+  const remaining = 42 - cells.length;
+  for (let day = 1; day <= remaining; day++) {
+    const d = new Date(year, month + 1, day);
+    cells.push({ date: d, inMonth: false, dateKey: formatDate(d, 'iso') });
+  }
+
+  return cells;
+}

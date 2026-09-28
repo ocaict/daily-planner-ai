@@ -6,7 +6,7 @@
 UI  →  Application Services  →  Repositories  →  Local Database (SQLite)
 ```
 
-- **UI** (`src/screens/`, `src/components/`) — Ionic components, no direct DB or AI access
+- **UI** (`src/pages/`, `src/components/`) — Ionic components, no direct DB or AI access
 - **Services** (`src/services/`) — business logic and operations
 - **Repositories** (`src/repositories/`) — data access only, SQLite queries
 - **AI** (`src/services/ai/`) — `AIService` → `AIProvider` → `GroqProvider` (provider-agnostic)
@@ -15,14 +15,14 @@ UI  →  Application Services  →  Repositories  →  Local Database (SQLite)
 
 ```
 src/
-  screens/              — Page-level components (Today, Tasks, Calendar, Settings)
-  components/           — Reusable UI components (Header, BottomNav, TaskCard)
+  pages/                — Page-level components (Today, Tasks, Calendar, AI, Settings)
+  components/           — Reusable UI components (Header, TabBar, TaskCard, PlanPreview)
   services/
-    TaskService.js
-    PlannerService.js
-    SettingsService.js
-    NotificationService.js
-    VoiceService.js
+    TaskService.js      — Task CRUD, validation, search, filter
+    PlannerService.js   — Daily planning operations (connects engine to repos)
+    SettingsService.js  — User settings (localStorage persistence)
+    CategoryService.js  — Category operations
+    PlannerEngine.js    — Deterministic scheduling algorithm (pure logic)
     ai/
       AIProvider.js
       GroqProvider.js
@@ -34,11 +34,25 @@ src/
     CategoryRepository.js
     DailyPlanRepository.js
     index.js
-  router/
-    index.js
+  database/
+    Connection.js       — SQLite connection wrapper
+    DatabaseManager.js  — Singleton connection manager
+    MigrationRunner.js  — Versioned migration executor
+    migrations/         — Numbered migration files
+  utils/
+    DateUtils.js        — Centralized date/time utilities
+    ThemeManager.js     — Light/dark/system theme
+    ErrorHandler.js     — Error wrapping and display
+    TaskValidation.js   — Task validation rules
+    DOMUtils.js         — DOM helpers
+  config/
+    AppConfig.js        — Frozen config + feature flags
+  data/
+    mockData.js         — Mock data for fallback/testing
   styles/
-    variables.css
-  App.js
+    main.css            — Global styles + CSS variables
+    layout.css          — Layout components
+  main.js               — App entry point, routing, bootstrap
 ```
 
 ## Key Design Decisions
@@ -49,3 +63,6 @@ src/
 - **Versioned migrations**: SQLite schema changes via numbered migration files
 - **CSS variables only**: Theming via custom properties, no CSS frameworks
 - **Plain JavaScript**: ES modules, no TypeScript
+- **Deterministic Planner**: `PlannerEngine` is pure logic — no AI, no network, no UI dependencies
+- **ServiceContainer**: DI container wires all services; falls back to mock data if DB unavailable
+- **Centralized date/time**: All date logic in `DateUtils.js` — no scattered date calculations

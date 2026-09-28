@@ -10,6 +10,8 @@ import TaskRepository from '../repositories/TaskRepository.js';
 import CategoryRepository from '../repositories/CategoryRepository.js';
 import TaskService from './TaskService.js';
 import CategoryService from './CategoryService.js';
+import PlannerService from './PlannerService.js';
+import SettingsService from './SettingsService.js';
 import { mockTasks } from '../data/mockData.js';
 
 class ServiceContainer {
@@ -19,11 +21,15 @@ class ServiceContainer {
     this._categoryRepository = null;
     this._taskService = null;
     this._categoryService = null;
+    this._plannerService = null;
+    this._settingsService = null;
     this._dbAvailable = false;
   }
 
   async initialize() {
     if (this._initialized) return;
+
+    this._settingsService = new SettingsService();
 
     try {
       await databaseManager.initialize();
@@ -36,6 +42,10 @@ class ServiceContainer {
 
       this._taskService = new TaskService(this._taskRepository, this._categoryRepository);
       this._categoryService = new CategoryService(this._categoryRepository);
+      this._plannerService = new PlannerService({
+        taskRepository: this._taskRepository,
+        settingsService: this._settingsService,
+      });
       this._dbAvailable = true;
 
       this._initialized = true;
@@ -92,6 +102,11 @@ class ServiceContainer {
         },
       };
 
+      this._plannerService = new PlannerService({
+        taskRepository: { findByDate: async () => [], findOverdue: async () => [] },
+        settingsService: this._settingsService,
+      });
+
       this._dbAvailable = false;
       this._initialized = true;
     }
@@ -103,6 +118,14 @@ class ServiceContainer {
 
   get categoryService() {
     return this._categoryService;
+  }
+
+  get plannerService() {
+    return this._plannerService;
+  }
+
+  get settingsService() {
+    return this._settingsService;
   }
 
   get taskRepository() {

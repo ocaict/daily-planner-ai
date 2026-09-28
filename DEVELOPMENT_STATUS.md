@@ -2,7 +2,7 @@
 
 ## Current Stage
 
-**Stage 2 — Local Task System**
+**Stage 3 — Calendar & Planner Engine**
 
 ## Completed Work
 
@@ -21,6 +21,23 @@
 - [x] Theme system with localStorage persistence
 - [x] Navigation with bottom tab bar and client-side routing
 - [x] Design system improvements
+
+### Stage 3 (Calendar & Planner Engine)
+- [x] CalendarPage connected to real task data (replaced mock data)
+- [x] Month navigation, day selection, task indicators
+- [x] Calendar task creation with date pre-fill
+- [x] Calendar task editing via detail modal
+- [x] DateUtils expanded: addDays, getDaysInMonth, getMonthGrid, timeToMinutes, minutesToTime, isSameDay, isBefore, isAfter, diffInDays
+- [x] SettingsService implemented (localStorage persistence)
+- [x] PlannerEngine created (deterministic, pure logic)
+- [x] Task scoring: priority, deadline proximity, overdue status
+- [x] Time-slot generation from available hours and existing tasks
+- [x] Conflict detection (overlaps, outside-hours)
+- [x] PlannerService connects engine to TaskRepository + SettingsService
+- [x] ServiceContainer wires PlannerService and SettingsService
+- [x] PlanPreview component for displaying proposed plans
+- [x] TodayPage "Plan my day" button with plan preview
+- [x] Unit tests for PlannerEngine (12 tests, all passing)
 
 ### Stage 2 (Local Task System)
 - [x] Migration v2: `categories` and `tasks` tables with indexes

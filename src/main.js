@@ -156,7 +156,12 @@ class App {
     }
 
     // Create new page instance with services
-    const pageInstance = new route.page(this.taskService, this.categoryService);
+    const pageInstance = new route.page(
+      this.taskService,
+      this.categoryService,
+      this.plannerService,
+      this.settingsService
+    );
     this.currentPage = pageInstance;
     this.currentPageName = route.name;
 
@@ -178,6 +183,14 @@ class App {
 
   get categoryService() {
     return serviceContainer.categoryService;
+  }
+
+  get plannerService() {
+    return serviceContainer.plannerService;
+  }
+
+  get settingsService() {
+    return serviceContainer.settingsService;
   }
 
   _showErrorScreen(message) {

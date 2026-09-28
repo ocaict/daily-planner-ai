@@ -2,6 +2,27 @@
 
 All notable changes to Daily Planner AI are documented here.
 
+## [0.4.0] — 2026-09-28
+
+### Added (Stage 3 — Calendar & Planner Engine)
+
+- **CalendarPage**: Connected to real task data via TaskService (replaced mock data)
+- **Calendar navigation**: Month view, day selection, task indicators, add-task button
+- **DateUtils**: Expanded with `addDays`, `getDaysInMonth`, `getMonthGrid`, `timeToMinutes`, `minutesToTime`, `isSameDay`, `isBefore`, `isAfter`, `diffInDays`
+- **SettingsService**: Implemented with localStorage persistence for planner settings (dayStart, dayEnd, defaultTaskDuration, planningStyle)
+- **PlannerEngine**: Deterministic scheduling algorithm with task scoring, time-slot generation, conflict detection
+- **PlannerService**: Connects PlannerEngine to TaskRepository and SettingsService
+- **ServiceContainer**: Wired PlannerService and SettingsService into DI container
+- **PlanPreview component**: Displays proposed daily plan with scheduled items, unscheduled tasks, conflicts
+- **TodayPage**: "Plan my day" button with plan preview integration
+- **Unit tests**: 12 tests for PlannerEngine (all passing)
+
+### Changed
+
+- `src/main.js`: Pages now receive plannerService and settingsService
+- `src/pages/CalendarPage.js`: Rewritten to use real task data
+- `src/pages/TodayPage.js`: Added "Plan my day" button and plan preview container
+
 ## [0.3.2] — 2026-09-28
 
 ### Added

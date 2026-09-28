@@ -13,7 +13,8 @@
     "cap:open:android": "cap open android",
     "emulator:android": "cap run android",
     "lint": "eslint src/",
-    "format": "prettier --write \"src/**/*.{js,css,html}\""
+    "format": "prettier --write \"src/**/*.{js,css,html}\"",
+    "test": "node --test src/**/*.test.js"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^7.0.0",

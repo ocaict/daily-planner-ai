@@ -1,40 +1,91 @@
 /**
  * Service for application settings management.
- * Stage 0 placeholder — all methods throw "Not implemented".
+ * Persists to localStorage. Planner settings consumed by PlannerEngine.
  */
-export default class SettingsService {
+
+const STORAGE_KEY = 'daily_planner_settings';
+
+const DEFAULT_SETTINGS = Object.freeze({
+  dayStart: '08:00',
+  dayEnd: '22:00',
+  defaultTaskDuration: 30,
+  planningStyle: 'balanced',
+});
+
+class SettingsService {
+  constructor() {
+    this._cache = null;
+  }
+
   /**
-   * Get all settings.
-   * @returns {Promise<object>}
+   * Load settings from localStorage, merged with defaults.
+   * @returns {object}
    */
-  async getSettings() {
-    throw new Error('Not implemented');
+  getSettings() {
+    if (this._cache) return this._cache;
+
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const stored = raw ? JSON.parse(raw) : {};
+      this._cache = { ...DEFAULT_SETTINGS, ...stored };
+    } catch {
+      this._cache = { ...DEFAULT_SETTINGS };
+    }
+
+    return this._cache;
+  }
+
+  /**
+   * Get a single setting value.
+   * @param {string} key
+   * @returns {*}
+   */
+  getSetting(key) {
+    return this.getSettings()[key];
   }
 
   /**
    * Update a specific setting.
    * @param {string} key
    * @param {*} value
-   * @returns {Promise<void>}
    */
-  async updateSettings(key, value) {
-    throw new Error('Not implemented');
+  updateSetting(key, value) {
+    const settings = this.getSettings();
+    settings[key] = value;
+    this._save(settings);
   }
 
   /**
-   * Get a single setting value.
-   * @param {string} key
-   * @returns {Promise<*>}
+   * Update multiple settings at once.
+   * @param {object} updates
    */
-  async getSetting(key) {
-    throw new Error('Not implemented');
+  updateSettings(updates) {
+    const settings = this.getSettings();
+    Object.assign(settings, updates);
+    this._save(settings);
   }
 
   /**
-   * Reset all settings to their default values.
-   * @returns {Promise<void>}
+   * Reset all settings to defaults.
    */
-  async resetToDefaults() {
-    throw new Error('Not implemented');
+  resetToDefaults() {
+    this._cache = { ...DEFAULT_SETTINGS };
+    this._save(this._cache);
+  }
+
+  /**
+   * Persist settings to localStorage.
+   * @param {object} settings
+   * @private
+   */
+  _save(settings) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+      this._cache = settings;
+    } catch {
+      // Storage full or unavailable — keep in-memory cache
+    }
   }
 }
+
+export default SettingsService;
