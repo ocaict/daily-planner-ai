@@ -46,6 +46,12 @@ UI (src/pages/, src/components/)
 - **Security**: never hard-code API keys in client code or anything packaged into the APK.
 - **Migrations**: versioned, safe upgrades. See `DATABASE_SCHEMA.md`.
 
+## Git
+
+- **Remote**: `https://github.com/ocaict/daily-planner-ai.git`
+- **Default branch**: `main`
+- **Commit style**: Conventional commits (`type: description`)
+
 ## Documentation to maintain
 
 Keep in sync with code: `PROJECT_SPEC.md`, `ARCHITECTURE.md`, `DEVELOPMENT_STATUS.md`, `DATABASE_SCHEMA.md`, `CHANGELOG.md`.
