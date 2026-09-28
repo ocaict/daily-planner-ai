@@ -1,0 +1,614 @@
+/* ============================================
+   Layout & Navigation Styles
+   ============================================ */
+
+/* === App Shell === */
+ion-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+#app-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* === Tab Bar === */
+#tab-bar-slot {
+  flex-shrink: 0;
+}
+
+.app-tab-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--app-surface);
+  border-top: 1px solid var(--app-border-light);
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
+  z-index: 100;
+}
+
+.app-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  color: var(--app-text-muted);
+  transition: color 0.18s ease, transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.app-tab-btn:active {
+  transform: scale(0.9);
+}
+
+.app-tab-btn.tab-active {
+  color: var(--app-primary);
+}
+
+.app-tab-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.app-tab-label {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.2px;
+}
+
+/* === Page Header === */
+.page-header {
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-border-light);
+  box-shadow: var(--app-shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  min-height: 56px;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--app-text);
+  margin: 0;
+}
+
+.page-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--app-text-muted);
+  border-radius: var(--app-radius-sm);
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s, background 0.15s;
+  outline: none;
+}
+
+.page-action-btn:active {
+  background: var(--app-surface-alt);
+  color: var(--app-primary);
+}
+
+.page-action-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* === Page Content === */
+.page-content {
+  padding: 16px;
+  padding-bottom: 100px;
+  min-height: 100%;
+}
+
+/* === Ask AI Button === */
+.ask-ai-section {
+  margin-top: 16px;
+}
+
+.ask-ai-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--app-primary) 0%, var(--app-secondary) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--app-radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(67, 97, 238, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.ask-ai-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.2);
+}
+
+.ask-ai-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* === Quick Add FAB === */
+.quick-add-fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--app-primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(67, 97, 238, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  z-index: 90;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.quick-add-fab:active {
+  transform: scale(0.92);
+  box-shadow: 0 2px 10px rgba(67, 97, 238, 0.3);
+}
+
+.quick-add-fab-icon {
+  width: 28px;
+  height: 28px;
+}
+
+
+
+/* Page transition */
+.page-enter {
+  animation: pageEnter 0.2s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Safe area utilities */
+.app-safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.app-safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Hide scrollbar but keep scroll */
+.app-no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.app-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--app-primary);
+  outline-offset: 2px;
+  border-radius: var(--app-radius-sm);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 360px) {
+  :root {
+    --app-spacing-md: 12px;
+    --app-spacing-lg: 20px;
+  }
+
+  .page-title {
+    font-size: var(--app-font-size-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  #app-content {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+
+/* Touch target minimum size */
+ion-button,
+ion-tab-button,
+ion-fab-button,
+ion-checkbox,
+ion-toggle,
+ion-chip {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Card hover effect (subtle) */
+.app-card {
+  transition: box-shadow var(--app-transition);
+}
+
+.app-card:hover {
+  box-shadow: var(--app-shadow-md);
+}
+
+/* Timeline styles for Today page */
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--app-spacing-md);
+  padding: var(--app-spacing-sm) 0;
+}
+
+.timeline-time {
+  min-width: 48px;
+  font-size: var(--app-font-size-sm);
+  font-weight: 600;
+  color: var(--app-text-muted);
+  text-align: right;
+  padding-top: 2px;
+}
+
+.timeline-content {
+  flex: 1;
+  border-left: 2px solid var(--app-border-light);
+  padding-left: var(--app-spacing-md);
+  padding-bottom: var(--app-spacing-sm);
+}
+
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--app-primary);
+  margin-left: -21px;
+  margin-top: 4px;
+  position: absolute;
+}
+
+/* Priority indicators */
+.priority-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: var(--app-spacing-xs);
+}
+
+.priority-indicator--low {
+  background: var(--app-success);
+}
+
+.priority-indicator--medium {
+  background: var(--app-warning);
+}
+
+.priority-indicator--high {
+  background: var(--app-danger);
+}
+
+/* Filter chips */
+.filter-chip {
+  --background: var(--app-surface-alt);
+  --color: var(--app-text-muted);
+  margin-right: var(--app-spacing-sm);
+}
+
+.filter-chip--active {
+  --background: var(--app-primary);
+  --color: var(--app-primary-contrast);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--app-text);
+  margin-top: 0;
+}
+
+/* Task List Item */
+.task-list-item {
+  position: relative;
+  margin-bottom: var(--app-spacing-sm);
+}
+
+.task-list-item-card .task-card {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.task-list-item-actions {
+  display: none;
+}
+
+/* Settings Page */
+.settings-section-title {
+  font-size: var(--app-font-size-md);
+  font-weight: 700;
+  color: var(--app-text);
+  margin-bottom: 12px;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--app-border-light);
+  gap: var(--app-spacing-md);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row--column {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.setting-label {
+  font-size: var(--app-font-size-md);
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.setting-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-subtext {
+  font-size: var(--app-font-size-xs);
+  color: var(--app-text-muted);
+}
+
+.setting-value {
+  font-size: var(--app-font-size-sm);
+  color: var(--app-text-muted);
+}
+
+.setting-link {
+  font-size: var(--app-font-size-sm);
+  color: var(--app-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.setting-badge {
+  font-size: var(--app-font-size-xs);
+  background: var(--app-surface-alt);
+  color: var(--app-text-muted);
+  padding: 2px 8px;
+  border-radius: var(--app-radius-full);
+  font-weight: 600;
+}
+
+.setting-input-time,
+.setting-select {
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+  border: 1px solid var(--app-border-light);
+  border-radius: var(--app-radius-sm);
+  padding: 6px 12px;
+  font-size: var(--app-font-size-sm);
+  font-family: inherit;
+  outline: none;
+}
+
+.setting-input-time:focus,
+.setting-select:focus {
+  border-color: var(--app-primary);
+}
+
+.settings-action-btn {
+  background: transparent;
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary);
+  border-radius: var(--app-radius-sm);
+  padding: 6px 14px;
+  font-size: var(--app-font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--app-transition);
+}
+
+.settings-action-btn:active {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
+}
+
+.settings-action-btn--danger {
+  color: var(--app-danger);
+  border-color: var(--app-danger);
+}
+
+.settings-action-btn--danger:active {
+  background: var(--app-danger);
+  color: #fff;
+}
+
+/* Theme Segment */
+.theme-segment {
+  display: flex;
+  width: 100%;
+  background: var(--app-surface-alt);
+  border-radius: var(--app-radius-md);
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid var(--app-border-light);
+  box-sizing: border-box;
+}
+
+.theme-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--app-text-muted);
+  padding: 8px 12px;
+  font-size: var(--app-font-size-sm);
+  font-weight: 600;
+  border-radius: var(--app-radius-sm);
+  cursor: pointer;
+  transition: all var(--app-transition);
+}
+
+.theme-btn.active {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
+  box-shadow: var(--app-shadow-sm);
+}
+
+/* AI Page Input Area */
+.ai-input-field {
+  flex: 1;
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+  border: 1px solid var(--app-border-light);
+  border-radius: var(--app-radius-full);
+  padding: 10px 16px;
+  font-size: var(--app-font-size-sm);
+  font-family: inherit;
+  outline: none;
+}
+
+.ai-input-field::placeholder {
+  color: var(--app-text-muted);
+  opacity: 0.7;
+}
+
+.ai-input-field:focus {
+  border-color: var(--app-primary);
+}
+
+.ai-input-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: opacity var(--app-transition);
+}
+
+.ai-send-btn {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
+}
+
+.ai-mic-btn {
+  background: transparent;
+  color: var(--app-text-muted);
+}
+
+/* AI chat */
+.ai-message {
+  max-width: 80%;
+  padding: var(--app-spacing-sm) var(--app-spacing-md);
+  border-radius: var(--app-radius-md);
+  margin-bottom: var(--app-spacing-sm);
+  line-height: 1.4;
+}
+
+.ai-message--user {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast);
+  margin-left: auto;
+  border-bottom-right-radius: var(--app-radius-sm);
+}
+
+.ai-message--assistant {
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+  margin-right: auto;
+  border-bottom-left-radius: var(--app-radius-sm);
+}
+
+/* Settings */
+.settings-section {
+  margin-bottom: var(--app-spacing-lg);
+}
+
+.settings-section__title {
+  font-size: var(--app-font-size-sm);
+  font-weight: 600;
+  color: var(--app-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--app-spacing-sm);
+  padding-left: var(--app-spacing-xs);
+}
+
+/* Quick add modal */
+.quick-add-modal {
+  --height: auto;
+  --border-radius: var(--app-radius-lg) var(--app-radius-lg) 0 0;
+}
+
+/* Offline banner */
+.offline-banner {
+  background: var(--app-warning);
+  color: #fff;
+  text-align: center;
+  padding: var(--app-spacing-sm);
+  font-size: var(--app-font-size-sm);
+  font-weight: 500;
+}
