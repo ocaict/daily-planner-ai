@@ -1,13 +1,43 @@
 /**
  * Calendar Page — Full calendar view with month navigation and day details.
  * Stage 3: Connected to real task data via TaskService.
+ * Uses native HTML + inline SVGs (no ion-button/ion-icon) for Android webview compatibility.
  */
 
 import { renderCalendarGrid } from '../components/CalendarGrid.js';
-import { formatDate, isToday, getMonthGrid } from '../utils/DateUtils.js';
+import { formatDate, isToday } from '../utils/DateUtils.js';
 import { openTaskFormModal } from '../components/TaskFormModal.js';
 import { openTaskDetailModal } from '../components/TaskDetailModal.js';
 import { showToast } from '../components/Toast.js';
+
+const ICONS = {
+  today: `<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+    <rect x="48" y="80" width="416" height="384" rx="48" stroke="currentColor" stroke-width="32" fill="none"/>
+    <circle cx="296" cy="232" r="24" fill="currentColor"/>
+    <circle cx="376" cy="232" r="24" fill="currentColor"/>
+    <circle cx="296" cy="312" r="24" fill="currentColor"/>
+    <circle cx="216" cy="312" r="24" fill="currentColor"/>
+    <circle cx="376" cy="312" r="24" fill="currentColor"/>
+    <circle cx="216" cy="392" r="24" fill="currentColor"/>
+    <circle cx="296" cy="392" r="24" fill="currentColor"/>
+    <line x1="128" y1="48" x2="128" y2="128" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
+    <line x1="384" y1="48" x2="384" y2="128" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
+    <line x1="48" y1="160" x2="464" y2="160" stroke="currentColor" stroke-width="32"/>
+  </svg>`,
+  add: `<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+    <line x1="256" y1="112" x2="256" y2="400" stroke="currentColor" stroke-width="48" stroke-linecap="round"/>
+    <line x1="112" y1="256" x2="400" y2="256" stroke="currentColor" stroke-width="48" stroke-linecap="round"/>
+  </svg>`,
+  chevronForward: `<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+    <polyline points="184 112 328 256 184 400" stroke="currentColor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>`,
+  calendar: `<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+    <rect x="48" y="80" width="416" height="384" rx="48" stroke="currentColor" stroke-width="32" fill="none"/>
+    <line x1="128" y1="48" x2="128" y2="128" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
+    <line x1="384" y1="48" x2="384" y2="128" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
+    <line x1="48" y1="160" x2="464" y2="160" stroke="currentColor" stroke-width="32"/>
+  </svg>`,
+};
 
 export class CalendarPage {
   constructor(taskService, categoryService, plannerService, settingsService) {
@@ -64,9 +94,9 @@ export class CalendarPage {
     return `
       <div class="page-header">
         <h1 class="page-title">Calendar</h1>
-        <ion-button fill="clear" data-action="today" aria-label="Go to today">
-          <ion-icon name="today-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <button class="page-action-btn" data-action="today" aria-label="Go to today">
+          ${ICONS.today}
+        </button>
       </div>
       <div class="page-content">
         <div class="calendar-grid-container">
@@ -91,6 +121,9 @@ export class CalendarPage {
 
     const todayBtn = container.querySelector('[data-action="today"]');
     if (todayBtn) todayBtn.addEventListener('click', this._onToday);
+
+    const addBtn = container.querySelector('[data-action="add-task"]');
+    if (addBtn) addBtn.addEventListener('click', this._onAddTask);
   }
 
   _onGridClick(event) {
@@ -181,9 +214,9 @@ export class CalendarPage {
     const dateLabel = today ? 'Today' : formatDate(this.selectedDate, 'display');
 
     const addBtn = `
-      <ion-button fill="clear" size="small" data-action="add-task" aria-label="Add task">
-        <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
-      </ion-button>
+      <button class="page-action-btn" data-action="add-task" aria-label="Add task">
+        ${ICONS.add}
+      </button>
     `;
 
     if (tasks.length === 0) {
@@ -194,7 +227,7 @@ export class CalendarPage {
             ${addBtn}
           </div>
           <div class="empty-state" style="padding: var(--app-spacing-lg);">
-            <ion-icon name="calendar-outline"></ion-icon>
+            ${ICONS.calendar}
             <p>No tasks for this day</p>
           </div>
         </div>
@@ -211,14 +244,19 @@ export class CalendarPage {
     const taskItems = sortedTasks
       .map(
         (task) => `
-        <ion-item data-task-id="${task.id}">
-          <ion-checkbox slot="start" ${task.completed ? 'checked' : ''} disabled></ion-checkbox>
-          <ion-label class="${task.completed ? 'task-completed' : ''}">
-            <h3>${this._escapeHtml(task.title)}</h3>
-            ${task.startTime ? `<p>${task.startTime}${task.durationMinutes ? ' · ' + task.durationMinutes + 'min' : ''}</p>` : ''}
-            ${task.priority ? `<p class="task-priority priority-${task.priority}">${task.priority}</p>` : ''}
-          </ion-label>
-        </ion-item>
+        <div class="task-item" data-task-id="${task.id}">
+          <div class="task-item-checkbox ${task.completed ? 'task-item-checkbox--done' : ''}">
+            ${task.completed
+              ? '<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon"><polyline points="176 176 272 272 480 64" stroke="currentColor" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+              : ''}
+          </div>
+          <div class="task-item-body">
+            <div class="task-item-title ${task.completed ? 'task-completed' : ''}">${this._escapeHtml(task.title)}</div>
+            ${task.startTime ? `<div class="task-item-meta">${task.startTime}${task.durationMinutes ? ' · ' + task.durationMinutes + 'min' : ''}</div>` : ''}
+            ${task.priority ? `<div class="task-item-priority priority-${task.priority}">${task.priority}</div>` : ''}
+          </div>
+          <div class="task-item-chevron">${ICONS.chevronForward}</div>
+        </div>
       `
       )
       .join('');
@@ -229,9 +267,9 @@ export class CalendarPage {
           <h3>${dateLabel}</h3>
           ${addBtn}
         </div>
-        <ion-list>
+        <div class="task-list">
           ${taskItems}
-        </ion-list>
+        </div>
       </div>
     `;
   }
